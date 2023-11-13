@@ -1,3 +1,4 @@
+import 'package:favorite_places/models/place.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -10,7 +11,7 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  Location? pickedLocation;
+  PlaceLocation? pickedLocation;
   var _isGettingLocation = false;
   void _getCurrntLocation() async {
     Location location = Location();
@@ -38,7 +39,13 @@ class _LocationInputState extends State<LocationInput> {
       _isGettingLocation = true;
     });
     locationData = await location.getLocation();
+    final lat = locationData.latitude;
+    final long = locationData.longitude;
+    if (lat == null || long == null) {
+      return;
+    }
     setState(() {
+      pickedLocation = new PlaceLocation(latitude: lat, longitude: long);
       _isGettingLocation = false;
     });
     print(locationData);
